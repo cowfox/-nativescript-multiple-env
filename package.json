@@ -1,10 +1,13 @@
 {
-  "name": "@nativescript/multiple-environments-building",
+  "name": "nativescript-multiple-environments-building",
   "version": "0.6.6",
   "description": "A better solution to make Nativescript to support multiple environments during the building process.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cowfox/nativescript-multiple-environments-building.git"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "nativescript": {
     "hooks": [
