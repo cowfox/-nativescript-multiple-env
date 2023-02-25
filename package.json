@@ -1,10 +1,10 @@
 {
-  "name": "@nativescript-dev/multiple-environments",
-  "version": "1.0.0",
-  "description": "A Hook For Nativescript to allow multiple Environments",
+  "name": "@nativescript/multiple-environments-building",
+  "version": "0.6.6",
+  "description": "A better solution to make Nativescript to support multiple environments during the building process.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/federicorp/nativescript-dev-multiple-env.git"
+    "url": "git+https://github.com/cowfox/nativescript-multiple-environments-building.git"
   },
   "nativescript": {
     "hooks": [
@@ -12,27 +12,30 @@
         "type": "before-prepare",
         "script": "lib/before-prepare.js",
         "inject": true
+      },
+      {
+        "type": "after-prepare",
+        "script": "lib/after-prepare.js",
+        "inject": true
       }
     ]
   },
-  "author": "Federicorp <fede_r@live.com>",
+  "author": "cowfox <foxshee@gmail.com>",
   "license": "Apache-2.0",
   "scripts": {
     "test": "exit 0;",
     "postinstall": "node postinstall.js",
-    "preuninstall": "node preuninstall.js",
-    "prepare.package": "cd ../publish && ./pack.sh",
-    "prepare.demo.install": "cd ../demo && tns plugin install ../publish/package/*.tgz",
-    "prepare.demo": " npm run prepare.package && npm run prepare.demo.install"
+    "preuninstall": "node preuninstall.js"
   },
   "devDependencies": {
-    "@types/node": "^10.7.0",
-    "@nativescript/hook": "^2.0.0"
+    "@types/node": "^12.22.12",
+    "@nativescript/hook": "^2.0.0",
+    "plist": "^3.0.6"
   },
   "bugs": {
-    "url": "https://github.com/federicorp/nativescript-dev-multiple-env/issues"
+    "url": "https://github.com/cowfox/nativescript-multiple-environments-building/issues"
   },
-  "homepage": "https://github.com/federicorp/nativescript-dev-multiple-env#readme",
+  "homepage": "https://github.com/cowfox/nativescript-multiple-environments-building#readme",
   "main": "postinstall.js",
   "directories": {
     "lib": "lib"
