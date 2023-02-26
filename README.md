@@ -1,5 +1,12 @@
 
-# @nativescript/multiple-environments-building
+# nativescript-multiple-environments-building
+
+[![NPM version][npm-image]][npm-url]
+[![Downloads][downloads-image]][npm-url]
+
+[npm-image]:http://img.shields.io/npm/v/nativescript-multiple-environments-building.svg
+[npm-url]:https://www.npmjs.com/package/nativescript-multiple-environments-building
+[downloads-image]:http://img.shields.io/npm/dm/nativescript-multiple-environments-building.svg
 
 This Hook aims to provide a better support for building a [NativeScript](https://nativescript.org/) application with multiple environments, such as:
 
