@@ -1,6 +1,6 @@
 {
   "name": "nativescript-multiple-environments-building",
-  "version": "0.6.6",
+  "version": "0.6.7",
   "description": "A better solution to make Nativescript to support multiple environments during the building process.",
   "repository": {
     "type": "git",
@@ -23,6 +23,15 @@
       }
     ]
   },
+  "keywords": [
+    "nativescript",
+    "multiple-environments",
+    "app-building",
+    "app-bundle-id",
+    "app-icon",
+    "ios",
+    "android"
+  ],
   "author": "cowfox <foxshee@gmail.com>",
   "license": "Apache-2.0",
   "scripts": {
@@ -31,7 +40,7 @@
     "preuninstall": "node preuninstall.js"
   },
   "devDependencies": {
-    "@types/node": "^12.22.12",
+    "@types/node": "^18.14.1",
     "@nativescript/hook": "^2.0.0",
     "plist": "^3.0.6"
   },
