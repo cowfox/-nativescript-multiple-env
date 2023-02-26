@@ -22,7 +22,7 @@ This Hook aims to provide a better support for building a [NativeScript](https:/
 ## Installation
 
 ```bash
-ns plugin add nativescript-multiple-environments-building
+npm i nativescript-multiple-environments-building --save-dev
 ```
 
 ## How to use?
@@ -41,7 +41,7 @@ An example **Env Rules** file looks like this:
         "environments"
     ],
     "directCopyRules": {
-        "Info.plist":"App_Resources/iOS/Info.plist",
+        "Info.plist": "App_Resources/iOS/Info.plist",
     },
     "appIconPath": "environments/app-icon/icon.png",
     "environments": [
@@ -52,7 +52,7 @@ An example **Env Rules** file looks like this:
         },
         {
             "name": "release",
-            "appBundleId": "org.nativescript.appName.release",
+            "appBundleId": "org.nativescript.appId.release",
             "matchRules": "(.*\\.release\\..*)"
         }
     ]
@@ -62,9 +62,10 @@ An example **Env Rules** file looks like this:
 With it, using `--env.use.ENV_NAME` to specify the actual environment to process while **{NS}** doing the `prepare` process. For example:
 
 ```bash
-# Debug
+# Debug iOS app with `staging` env. configs.
 ns debug ios --env.use.staging
-# Build a release
+
+# Build a final release
 ns run ios --bundle --env.aot --env.uglify --env.use.release
 ```
 
@@ -96,6 +97,13 @@ Given the case that the `ns prepare` process will add all files inside the `App_
 And for `Android`, since it still can be safe to delete those `env. files` **AFTER** the `ns prepare` process, the **deletion** process is just simply added to the `after-prepare` Hook.
 
 In other words, `directCopyRules` would be probably used on `iOS` side unless you are still having some other needs for `Android`.
+
+### App Icon Generation
+
+The generation of **App Icon** is conducted by the built-in **{NS}** CMD - `ns resources generate icons`.
+
+In order to make this CMD working, please be sure to **NOT** delete the default `icon.png` files from `App_Resources` folder. Otherwise, the generation process may fail!!!
+
 
 <hr>
 <h3 align="center">Made with ❤️ for the NativeScript community</h3>
