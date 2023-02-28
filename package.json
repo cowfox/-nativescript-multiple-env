@@ -40,9 +40,10 @@
     "preuninstall": "node preuninstall.js"
   },
   "devDependencies": {
-    "@types/node": "^18.14.1",
     "@nativescript/hook": "^2.0.0",
-    "plist": "^3.0.6"
+    "@types/node": "^18.14.1",
+    "plist": "^3.0.6",
+    "semver": "^7.3.8"
   },
   "bugs": {
     "url": "https://github.com/cowfox/nativescript-multiple-environments-building/issues"
@@ -51,6 +52,5 @@
   "main": "postinstall.js",
   "directories": {
     "lib": "lib"
-  },
-  "dependencies": {}
+  }
 }
