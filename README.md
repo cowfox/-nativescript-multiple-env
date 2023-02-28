@@ -12,6 +12,7 @@ This Hook aims to provide a better support for building a [NativeScript](https:/
 
 - Easily use different `App Bundle ID` in different environments.
 - Quickly apply the `Version #` from `package.json` to the actual destinations (`Info.plist` on `iOS` and `AndroidManifest.xml` on `Android`).
+  - With the new `autoBuildNumber` config, you could easily auto generate a `Version Code` and use it when in the **RELEASE** mode.
 - Safely configure the **Copying** strategies to any type of files under different environments, like:
   - Using diff. `Info.plist` or `strings.xml` to set diff. **App Name** or other configs.
   - Having dif. `GoogleService-Info.plist` for Google services.
@@ -36,6 +37,10 @@ An example **Env Rules** file looks like this:
 
 ```json
 {
+    "version": "1.6.6",
+    "buildNumber": "66",
+    "versionCode": "1060666",
+    "autoVersionCode": true,
     "default": "staging",
     "extraPaths": [
         "environments"
@@ -87,6 +92,10 @@ The **Env Rules** file currently support the following configurations:
   - For example: `{ "Info.plist":"App_Resources/iOS/Info.plist" }` means to copy the `Info.plist` to the `App_Resources` folder once it gets copied from its `env.` version (like `Info.dev.plist`).
 - `appIconPath` - The `file path` used for `ns resources generate icons` CMD. This is very useful when the app has diff. **App Icon** under diff. environments.
   - Still, the `path` is relative to the `project root folder`).
+- `version` - The version #, same as the one in the `package.json`.
+- `buildNumber` - The build # that changes each time when building the app.
+- `versionCode` - The version code that is used to fill `CFBundleVersion` (on `iOS`) or `VersionCode` (on `Android`).
+- `autoVersionCode` - The flag to indicate if using the built-in logic to auto generate `Version Code` based on `Version #` and `Build #`.
 
 ## Discussions
 
@@ -104,6 +113,27 @@ The generation of **App Icon** is conducted by the built-in **{NS}** CMD - `ns r
 
 In order to make this CMD working, please be sure to **NOT** delete the default `icon.png` files from `App_Resources` folder. Otherwise, the generation process may fail!!!
 
+### App Versioning
+
+With the new added related **Version Info** of the **Env Rules** file, now you could manage the **App Version** in the following ways:
+
+- The `Manual` way - Enter a free value to those fields into the **Env Rules** file every time **BEFORE** the app building.
+  - In this way, set the flag `autoVersionCode` to `false` and totally ignore `buildNumber`.
+- The `Auto` way - By setting `autoVersionCode` to `true`, before the app building, it will **automatically** generate a new `Version Code` based on the given values of `Version #` and `Build #`.
+  - For example, a version # (`1.16.6`) and build # (`22`) will generate a new `Version Code` as `1160622`.
+
+For `buildNumber`,
+
+- It is a number between `0` and `99`.
+- When the app gets building, if the `Version #` does not change, it will be added by `1` automatically.
+  - If changed, it will be reset to `1` from the start - meaning "the **FIRST** build of the new version".
+
+> NOTES:
+>
+> - In order to make the `Version Code` generation process works, the `miner`, `patch` parts of `Version #` and `Build #` should not exceed `99`. This limitation should cover most of the cases - typically you may have already bumped the upper part of the version number.
+> - The whole updating logic of `Build #` and `Version Code` is ONLY used in the **RELEASE** mode!! With it, it will not bring too much hassle while in the **Dev** mode.
+
+Also, the `iOS` and `Android` manage their **Version Info** separately. In the normal case, if you build the app against both platforms at the same time, the generated `Version Code` (as well as the `buildNumber`) should be identical for each release. However, if it does not (due to some unexpected reasons), it should be very easy to fix it by **Manually** change it to a correct value inside the **Env Rules** file.
 
 <hr>
 <h3 align="center">Made with ❤️ for the NativeScript community</h3>
