@@ -1,6 +1,6 @@
 {
   "name": "nativescript-multiple-environments-building",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "A better solution to make Nativescript to support multiple environments during the building process.",
   "repository": {
     "type": "git",
