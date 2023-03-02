@@ -1,0 +1,13 @@
+# .npmignore
+
+#tests
+demo
+
+#build tools
+.travis.yml
+.jenkins.yml
+.codeclimate.yml
+
+#editor settings
+.idea
+.editorconfig
