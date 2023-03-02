@@ -13,7 +13,7 @@ This Hook aims to provide a better support for building a [NativeScript](https:/
 - Easily use different `App Bundle ID` in different environments.
 - Quickly apply the `Version #` from `package.json` to the actual destinations (`Info.plist` on `iOS` and `AndroidManifest.xml` on `Android`).
   - With the new `autoBuildNumber` config, you could easily auto generate a `Version Code` and use it when in the **RELEASE** mode.
-- Safely configure the **Copying** strategies to any type of files under different environments, like:
+- Safely configure the **File Copying** strategies to any type of file under different environments, like:
   - Using diff. `Info.plist` or `strings.xml` to set diff. **App Name** or other configs.
   - Having dif. `GoogleService-Info.plist` for Google services.
 - Simply generate dedicated **App Icon** image for each environment.
@@ -49,6 +49,7 @@ An example **Env Rules** file looks like this:
         "Info.plist": "App_Resources/iOS/Info.plist",
     },
     "appIconPath": "environments/app-icon/icon.png",
+    "envFilesMatchRules": "staging|release",
     "environments": [
         {
             "name": "staging",
@@ -90,8 +91,14 @@ The **Env Rules** file currently support the following configurations:
 - `directCopyRules` - The **direct copying rules** conducted **AFTER** the normal file copy. Typically, it is used to help prepare the files on `iOS`.
   - Each `pair` includes two parts: the `source filename` and the `destination path` (relative to the `project root folder`).
   - For example: `{ "Info.plist":"App_Resources/iOS/Info.plist" }` means to copy the `Info.plist` to the `App_Resources` folder once it gets copied from its `env.` version (like `Info.dev.plist`).
-- `appIconPath` - The `file path` used for `ns resources generate icons` CMD. This is very useful when the app has diff. **App Icon** under diff. environments.
-  - Still, the `path` is relative to the `project root folder`).
+  - **NOTE**: The **direct file copying** ONLY happens after done a **normal file copy**. In other words, if the `source filename` is not for a output file of a **normal file copy**, it will be ignored.
+- `appIconPath` - The `file path` used for `ns resources generate icons` CMD. This is very useful when the app has diff. **App Icon** under diff. environments on `IOS`.
+  - Still, the `path` is relative to the `project root folder`.
+  - **NOTE**: On `Android`, the diff. **App Icon** under diff. environments could be still inside the `App_Resources` folder which could be safely deleted **AFTER** the `prepare` process.
+- `envFilesMatchRules` - The specific `matching rules` to help identify all the `env.` files that could be deleted **AFTER** a `prepare`.
+  - For example, if the `matchRules` use the words (`dev` and `release`) to help identify the `env` files, the value of `envFilesMatchRules` should be `dev|release`.
+  - **NOTE**: This should be an `Android` ONLY config. On `iOS`, it more relies on `directCopyRules` config to help achieve the goals.
+  - If not set, it will use the default value - `development|dev|edge|test|uat|beta|staging|sta|release|prod|production`.
 - `version` - The version #, same as the one in the `package.json`.
 - `buildNumber` - The build # that changes each time when building the app.
 - `versionCode` - The version code that is used to fill `CFBundleVersion` (on `iOS`) or `VersionCode` (on `Android`).
@@ -111,7 +118,19 @@ In other words, `directCopyRules` would be probably used on `iOS` side unless yo
 
 The generation of **App Icon** is conducted by the built-in **{NS}** CMD - `ns resources generate icons`.
 
-In order to make this CMD working, please be sure to **NOT** delete the default `icon.png` files from `App_Resources` folder. Otherwise, the generation process may fail!!!
+By default, if the `icon.png` file is inside the `App_Resources` folder for both `iOS` and `Android`, the process can help prepare the **App Icon** files for both `iOS` and `Android`. However, the **NEW** `Android` OS versions are actually NOT using `icon.png` to be the App Icon. Instead, it uses a `mipmap` style (by an `xml` file to define both `foreground` and `background`). Luckily, the new method could be still under the realm of `env. based file copying`.
+
+Example of `ic_launcher.xml` file:
+
+```xml
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@color/ic_launcher_background"/>
+    <foreground android:drawable="@mipmap/ic_launcher_foreground"/>
+</adaptive-icon>
+
+```
+
+> **NOTE**: In order to make the `ns resources generate icons` CMD working, please be sure to **NOT** delete the default `icon.png` files from `App_Resources` folder. Otherwise, the generation process may fail!!!
 
 ### App Versioning
 
@@ -128,10 +147,22 @@ For `buildNumber`,
 - When the app gets building, if the `Version #` does not change, it will be added by `1` automatically.
   - If changed, it will be reset to `1` from the start - meaning "the **FIRST** build of the new version".
 
-> NOTES:
+> **NOTES**:
 >
 > - In order to make the `Version Code` generation process works, the `miner`, `patch` parts of `Version #` and `Build #` should not exceed `99`. This limitation should cover most of the cases - typically you may have already bumped the upper part of the version number.
 > - The whole updating logic of `Build #` and `Version Code` is ONLY used in the **RELEASE** mode!! With it, it will not bring too much hassle while in the **Dev** mode.
+> - With the "NEW" Android building structure, the "version info" could be added to the `gradle` file. In other words, we could simply update them **BEFORE** the `prepare` process.
+
+```
+// Example of adding "version info" to `gradle` file
+android {
+  defaultConfig {
+    // Version Information
+    versionCode 1060606
+    versionName "1.6.6"
+  }
+}
+```
 
 Also, the `iOS` and `Android` manage their **Version Info** separately. In the normal case, if you build the app against both platforms at the same time, the generated `Version Code` (as well as the `buildNumber`) should be identical for each release. However, if it does not (due to some unexpected reasons), it should be very easy to fix it by **Manually** change it to a correct value inside the **Env Rules** file.
 
