@@ -1,0 +1,10 @@
+{
+  "project_info": {
+    "project_number": "666",
+    "project_id": "release-666",
+    "storage_bucket": "release"
+  },
+  "client": [
+  ],
+  "configuration_version": "1"
+}

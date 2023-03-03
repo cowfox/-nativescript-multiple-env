@@ -1,0 +1,28 @@
+{
+    "version": "1.6.6",
+    "buildNumber": "6",
+    "versionCode": "1060606",
+    "autoVersionCode": true,
+    "default": "development",
+    "extraPaths": [
+        "app_res_env",
+        "src/environments"
+    ],
+    "directCopyRules": {
+        "Info.plist": "App_Resources/iOS/Info.plist",
+        "FAKE-GoogleService-Info.plist": "App_Resources/iOS/FAKE-GoogleService-Info.plist"
+    },
+    "appIconPath": "app_res_env/app-icon/icon.png",
+    "environments": [
+        {
+            "name": "development",
+            "appBundleId": "org.nativescript.demo.multienvbuilding.dev",
+            "matchRules": "(.*\\.dev\\..*)"
+        },
+        {
+            "name": "release",
+            "appBundleId": "org.nativescript.demo.multienvbuilding",
+            "matchRules": "(.*\\.release\\..*)"
+        }
+    ]
+}

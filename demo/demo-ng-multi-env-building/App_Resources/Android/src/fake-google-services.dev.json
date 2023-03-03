@@ -1,0 +1,10 @@
+{
+  "project_info": {
+    "project_number": "666",
+    "project_id": "dev-666",
+    "storage_bucket": "dev"
+  },
+  "client": [
+  ],
+  "configuration_version": "1"
+}
